@@ -13,7 +13,6 @@ import 'controllers/filter_controller.dart';
 // - quotation mark handling in text
 // - multi-csat not working (CATI)
 // - Nov 11-17 chat #15 throws null error until you separate out the CATI interaction from the primary.
-// - bring Rob in.
 
 // POST APPROVAL:
 // - build for macOS

@@ -85,15 +85,63 @@ class AppController extends GetxController {
   }
 
   Future<bool> import() async {
+    // SQL query from Snowflake (1 Dec 2021)
+    //select mi.primary_interaction_uuid
+//   , fip.interaction_uuid
+//   , fip.INTERACTION_PART_ID
+//   , fip.created_at_datetime
+//   , replace(replace(replace(replace(replace(replace(replace(fip.message, '<p>', ''), '<br>', ''), '</p>', ''), '</br>', ''), ',','`'), '\n',''), '\r','') as actual_message
+//   , fip.message_number
+//   , fip.sender_type
+//   , fip.sender_person_uuid
+//   , fip.type
+//   , mi.assigned_agent_person_uuid
+//   , replace(mi.assigned_agent_full_name, ',', '`') as assigned_agent_full_name
+//   , mi.primary_outsider_person_uuid
+//   , replace(mi.primary_outsider_full_name, ',','`') as primary_outsider_full_name
+//   , p.email primary_outsider_email
+//   , mi.support_topic_level_1
+//   , mi.support_topic_level_2
+//   , mi.support_topic_level_3
+//   , source_url
+//   , mi.rating
+//   , replace(replace(replace(replace(replace(replace(replace(mi.rating_remark, '<p>', ''), '<br>', ''), '</p>', ''), '</br>', ''), ',','`'), '\n',''), '\r','') as rating_remark
+//   , mi.device_type
+//   , mi.disposition_status
+//   , replace(replace(replace(replace(replace(replace(replace(mi.DISPOSITION_NOTE, '<p>', ''), '<br>', ''), '</p>', ''), '</br>', ''), ',','`'), '\n',''), '\r','') as DISPOSITION_NOTE
+//   , mi.IS_INITIATED_WITH_CATI
+//   , mi.ASSIGNED_AGENT_MANAGER_FULL_NAME
+//   , replace(mi.PRIMARY_OUTSIDER_COMPANY_NAME, ',','`') as PRIMARY_OUTSIDER_COMPANY_NAME
+//   , mi.ASSIGNED_AGENT_DEPARTMENT_CODE
+//   , mi.HANDLE_TIME
+
+// from data_warehouse.fact_interaction_part fip
+
+//     join "DWH"."MART_SUPPORT"."INTERACTIONS" mi
+//       on mi.interaction_uuid = fip.interaction_uuid
+//     join "DWH"."DATA_WAREHOUSE"."DIM_PERSON" p
+//         on mi.PRIMARY_OUTSIDER_PERSON_UUID = p.PERSON_UUID
+
+// where mi.start_datetime >= '2021-11-30'
+// and mi.start_datetime < '2021-12-6'
+// and mi.type = 'CHAT'
+// and mi.is_valid = true
+// order by Day(mi.start_datetime) desc,1 , 2, 6 asc
+
     if (needImport.value) {
       FilterController filterController = Get.find();
       String? str = '';
       str += await rootBundle.loadString('assets/nov_chats_1_to_4.csv');
       str += '\n' + await rootBundle.loadString('assets/nov_chats_5_to_9.csv');
+      // str +=
+      //     '\n' + await rootBundle.loadString('assets/nov_chats_10_to_14.csv');
+      // str +=
+      //     '\n' + await rootBundle.loadString('assets/nov_chats_15_to_18.csv');
       str +=
-          '\n' + await rootBundle.loadString('assets/nov_chats_10_to_14.csv');
+          '\n' + await rootBundle.loadString('assets/nov_chats_19_to_23.csv');
       str +=
-          '\n' + await rootBundle.loadString('assets/nov_chats_15_to_19.csv');
+          '\n' + await rootBundle.loadString('assets/nov_chats_24_to_29.csv');
+      str += '\n' + await rootBundle.loadString('assets/nov_chats_30.csv');
 
       List<String> lines = const LineSplitter().convert(str);
       String rawHeaders = lines[0];
@@ -180,8 +228,11 @@ class AppController extends GetxController {
         }
       }
     }
-
-    await exportController.exportSearch(l);
+    try {
+      await exportController.exportSearch(l);
+    } catch (e) {
+      debugPrint('$e');
+    }
     debugPrint('prepped ${l.length - 1} interactions for export');
   }
 }

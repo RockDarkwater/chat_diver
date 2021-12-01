@@ -73,7 +73,10 @@ flutter:
     - assets/nov_chats_1_to_4.csv
     - assets/nov_chats_5_to_9.csv
     - assets/nov_chats_10_to_14.csv
-    - assets/nov_chats_15_to_19.csv
+    - assets/nov_chats_15_to_18.csv
+    - assets/nov_chats_19_to_23.csv
+    - assets/nov_chats_24_to_29.csv
+    - assets/nov_chats_30.csv
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
