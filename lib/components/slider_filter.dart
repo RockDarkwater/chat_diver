@@ -2,6 +2,7 @@ import 'package:chat_diver/controllers/filter_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// Filter widget used for numeric values like AHT
 class SliderFilter extends StatelessWidget {
   final FilterController filterController = Get.find();
   SliderFilter({Key? key}) : super(key: key);

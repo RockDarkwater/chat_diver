@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'date_picker.dart';
 import 'filter_box.dart';
 
+//Filter popup that bridges the main upload screen and the chat scanning screen.
 class FilterPopUp extends StatelessWidget {
   final AppController appController = Get.find();
   FilterPopUp({Key? key}) : super(key: key);

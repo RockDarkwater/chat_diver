@@ -3,6 +3,7 @@ import 'package:chat_diver/controllers/filter_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// Button used to launch the filter popup
 class FilterButton extends StatelessWidget {
   final AppController appController = Get.find();
   final FilterController filterController = Get.find();

@@ -12,6 +12,7 @@ class DropDownFilterBox extends StatelessWidget {
   DropDownFilterBox(this.header, {Key? key}) : super(key: key);
 
   String _readableHeader(String dataHeader) {
+    //Translate Data headers to colloquial strings
     switch (dataHeader) {
       case 'RATING':
         return 'CSAT';
@@ -60,11 +61,13 @@ class DropDownFilterBox extends StatelessWidget {
               : Container();
         },
         onChanged: (choices) {
+          // when filter options are changed, reset the applied filters array in the controller
           debugPrint('${header.camelCase} choices: $choices');
           (choices.isEmpty)
               ? filterController.appliedFilters.remove(header)
               : filterController.appliedFilters[header] =
                   List<String>.from(choices.toList());
+          // reset dynamic filter options
           filterController.assembleOptions(header);
         },
         clearButtonSplashRadius: 20,

@@ -9,6 +9,7 @@ class FilterController extends GetxController {
   Rx<TextEditingController> textFilterController = TextEditingController().obs;
   Rx<RangeValues> ahtValues = const RangeValues(5, 5).obs;
 
+  //List of active headers to filter on
   List<String> currentFilters = [
     'RATING',
     'ASSIGNED_AGENT_FULL_NAME',
@@ -22,16 +23,19 @@ class FilterController extends GetxController {
     'HANDLE_TIME'
   ];
 
+  // initial date range to query
   Rx<DateTime> minDateTime =
       DateTime.now().subtract(const Duration(days: 7)).obs;
   Rx<DateTime> maxDateTime = DateTime.now().obs;
   bool? isCATI;
 
+  //probably obsolete, but pulled out in case prep needs to happen before filtering
   void launchFilterDialog(BuildContext context) {
     // assembleOptions();
     Get.dialog(FilterPopUp());
   }
 
+  //clear previous filters and then reassemble with initial values
   void resetFilters() {
     AppController appController = Get.find();
     appController.chats.clear();
@@ -43,14 +47,13 @@ class FilterController extends GetxController {
     debugPrint('Filters reset');
   }
 
+  // set the aht slider to initial values from filter options
   RangeValues getMinMaxHandleTime() {
-    AppController appController = Get.find();
-    List<int> hTimes = appController.handleTimes.values.toList();
-    hTimes.sort();
     return RangeValues(double.tryParse(filterOptions['HANDLE_TIME']![0])!,
         double.tryParse(filterOptions['HANDLE_TIME']![1])!);
   }
 
+  //set handle time min/max based on all handle times
   void setInitialHandleTimeParameters() {
     AppController appController = Get.find();
     List<int> hTimes = appController.handleTimes.values.toList();
@@ -65,8 +68,11 @@ class FilterController extends GetxController {
         double.tryParse(filterOptions['HANDLE_TIME']![1])!);
   }
 
+  //assemble all options for the current list of headers
   void assembleOptions([String? skipHeader]) {
     AppController appController = Get.find();
+
+    //ignore the header that was just used to choose options
     if (skipHeader != null) {
       List<String> saveHeaders = filterOptions[skipHeader]!;
       filterOptions.clear();
@@ -175,6 +181,7 @@ class FilterController extends GetxController {
     debugPrint('Options Updated');
   }
 
+  //apply filters to raw data to pare down chosen chats.
   List<Map<String, dynamic>> filterData() {
     AppController appController = Get.find();
     List<Map<String, dynamic>> l = [];
@@ -249,7 +256,7 @@ class FilterController extends GetxController {
         }
       }
     }
-
+    // compile data based on primary interactions that passed the filter tests
     for (var line in appController.data) {
       if (primaryInteractions.contains(line['PRIMARY_INTERACTION_UUID'])) {
         l.add(line);

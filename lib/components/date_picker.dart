@@ -9,11 +9,13 @@ class DatePicker extends StatelessWidget {
   final FilterController filterController = Get.find();
   DatePicker({Key? key}) : super(key: key);
 
+  // Whenever the date filters are changed, repull the raw data
   void _onSelectionChanged(Object args) async {
     AppController appController = Get.find();
     DateTime start;
     DateTime end;
 
+    // check if single date, or date range
     if (args is PickerDateRange) {
       start = args.startDate!;
       end = args.endDate ?? args.startDate!;
@@ -24,15 +26,19 @@ class DatePicker extends StatelessWidget {
       return;
     }
 
-    //shift to beginning of start and end of end day
+    //shift controller values to the beginning of start and end of end day
     filterController.maxDateTime.value =
         DateTime(end.year, end.month, end.day + 1, 0, 0, 0, 0, -1);
     filterController.minDateTime.value =
         DateTime(start.year, start.month, start.day);
     debugPrint('First: ${filterController.minDateTime.value.toString()}');
     debugPrint('Last: ${filterController.maxDateTime.value.toString()}');
+
+    // after dates are changed, re-import raw chat data
     appController.needImport.value = true;
     await appController.import();
+
+    // reset dynamic filter choices
     filterController.assembleOptions();
     debugPrint(
         'Filters after date change: ${filterController.appliedFilters.toString()}');

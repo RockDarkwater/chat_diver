@@ -1,5 +1,6 @@
 import 'package:demoji/demoji.dart';
 
+// Each message that makes up a chat
 class Message {
   final String messageID; // INTERACTION_PART_ID
   String sourceURL = '';
@@ -24,6 +25,7 @@ class Message {
       Demoji.star_struck,
     ];
 
+    // pull message data from each line of the CSV import map
     messageText = dataMap['ACTUAL_MESSAGE'].toString().replaceAll("`", ",");
     sourceURL = dataMap['SOURCE_URL'] ?? '';
     senderType = dataMap['SENDER_TYPE'];
@@ -47,6 +49,7 @@ class Message {
       }
     }
 
+    // set sender type and name based on message source
     if (senderType == 'agent') {
       senderName =
           dataMap['ASSIGNED_AGENT_FULL_NAME'].toString().replaceAll("`", ",");

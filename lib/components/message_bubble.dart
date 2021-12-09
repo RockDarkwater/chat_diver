@@ -14,6 +14,7 @@ class MessageBubble extends StatelessWidget {
   CrossAxisAlignment? messageAlignmentHoriz;
   bool csatMsg = false;
 
+  //widget that displays the message, formatted based on source and context
   MessageBubble(this.msg, {Key? key}) : super(key: key) {
     // Color Logic
 

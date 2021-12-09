@@ -4,6 +4,7 @@ import 'package:chat_diver/models/interaction.dart';
 import 'package:chat_diver/models/message.dart';
 import 'package:flutter/material.dart';
 
+//The widget that displays the contents of a conversation model
 class ConversationView extends StatelessWidget {
   final Conversation conversation;
   final ScrollController controller = ScrollController();
@@ -35,6 +36,7 @@ class ConversationView extends StatelessWidget {
             }));
   }
 
+  // sort the interactions within a conversation by date and then message ID
   void sortConversation() {
     List<Message> msgs;
     List<Interaction> ints = conversation.interactions.values.toList();
@@ -56,6 +58,7 @@ class ConversationView extends StatelessWidget {
     conversation.interactions = {for (var int in ints) int.interactionID: int};
   }
 
+  // Calculate the total handle time of the displayed conversation
   int totalHandleTime() {
     int total = 0;
     conversation.interactions.forEach((key, value) {

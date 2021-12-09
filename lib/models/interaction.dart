@@ -1,5 +1,6 @@
 import 'package:chat_diver/models/message.dart';
 
+// Interactions match TA definition with agent and traveler info, and a list of messages
 class Interaction {
   String interactionID = '';
   String agentName = '';

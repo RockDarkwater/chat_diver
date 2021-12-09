@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+//currently, export lets the user pick the destination folder and then converts the given list of lists to csv format.
 class ExportController extends GetxController {
   Future<File> get _localFile async {
     final path = await _localPath;

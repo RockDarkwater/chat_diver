@@ -3,6 +3,7 @@ import 'package:chat_diver/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_diver/models/interaction.dart';
 
+//widget that displays each interaction in the conversation
 class InteractionSegment extends StatelessWidget {
   final Interaction interaction;
 
@@ -40,6 +41,7 @@ class InteractionSegment extends StatelessWidget {
             }));
   }
 
+  // create the end of chat disposition message
   void closeInteraction() {
     Map<String, dynamic> map = {};
     String key = UniqueKey().toString();

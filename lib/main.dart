@@ -7,8 +7,10 @@ import 'components/filter_button.dart';
 import 'controllers/app_controller.dart';
 import 'controllers/filter_controller.dart';
 
-// ### Nov-22 ### 1547 lines of code
+// TO-DO:
 
+// - text search agent/traveler tri-toggle
+// - text search combine terms option
 // - address date sorting errors
 // - quotation mark handling in text
 // - multi-csat not working (CATI)
@@ -31,6 +33,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
+  // initiate controllers (GetX package)
   final FilterController filterController = Get.put(FilterController());
   final AppController appController = Get.put(AppController());
 
@@ -38,15 +41,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ConversationView? conversationView;
 
+    // set window size restrictions
     appController.constrictWindow();
+
+    //begin initial import
     Future<bool> _imported = appController.import();
 
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        //TripActions Blue as default color
         primaryColor: const Color.fromRGBO(2, 146, 254, 1),
       ),
       home: Scaffold(
+        // create app header widgets
         appBar: AppBar(
           leading: FilterButton(),
           title: Obx(
@@ -204,7 +212,6 @@ class MyApp extends StatelessWidget {
                             decoration: const BoxDecoration(
                               color: Color.fromRGBO(2, 146, 254, 1),
                               shape: BoxShape.circle,
-                              // boxShadow: [BoxShadow()],
                             ),
                             child: Stack(
                               alignment: AlignmentDirectional.center,

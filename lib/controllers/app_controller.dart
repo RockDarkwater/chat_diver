@@ -17,14 +17,14 @@ class AppController extends GetxController {
   RxBool loading = false.obs;
   RxMap<String, Conversation> chats = <String, Conversation>{}.obs;
   RxBool needImport = true.obs;
+  RxInt conversationToShow = 0.obs;
 
   void constrictWindow() async {
     await DesktopWindow.setFullScreen(true);
     await DesktopWindow.setMinWindowSize(const Size(750, 600));
   }
 
-  var conversationToShow = 0.obs;
-
+  //controls the chat navigation in conversation view
   void increment() => conversationToShow.value++;
 
   void decrement() => conversationToShow.value--;
@@ -36,11 +36,15 @@ class AppController extends GetxController {
     String interactionID;
     String messageID;
     List<Map<String, dynamic>> filteredData = filterController.filterData();
-    //for each map in data, create a conversation (if it doesn't exist), then an interaction (iide), then create the message.
+    //for each map in data, create a conversation (if it doesn't exist),
+    //  then an interaction (iide), then create the message.
 
     if (filteredData.isNotEmpty) {
+      // reset chat array
       chats.clear();
       conversationToShow.value = 0;
+
+      // build conversations from message granularity import
       for (var map in filteredData) {
         conversationID = map['PRIMARY_INTERACTION_UUID'];
         interactionID = map['INTERACTION_UUID'];
@@ -84,6 +88,7 @@ class AppController extends GetxController {
     return false;
   }
 
+  // pull in data based on given date parameters.
   Future<bool> import() async {
     // SQL query from Snowflake (1 Dec 2021)
     //select mi.primary_interaction_uuid
@@ -130,19 +135,23 @@ class AppController extends GetxController {
 
     if (needImport.value) {
       FilterController filterController = Get.find();
+
+      //Load raw data from csv asset files
       String? str = '';
       str += await rootBundle.loadString('assets/nov_chats_1_to_4.csv');
       str += '\n' + await rootBundle.loadString('assets/nov_chats_5_to_9.csv');
-      // str +=
-      //     '\n' + await rootBundle.loadString('assets/nov_chats_10_to_14.csv');
-      // str +=
-      //     '\n' + await rootBundle.loadString('assets/nov_chats_15_to_18.csv');
+      str +=
+          '\n' + await rootBundle.loadString('assets/nov_chats_10_to_14.csv');
+      str +=
+          '\n' + await rootBundle.loadString('assets/nov_chats_15_to_18.csv');
       str +=
           '\n' + await rootBundle.loadString('assets/nov_chats_19_to_23.csv');
       str +=
           '\n' + await rootBundle.loadString('assets/nov_chats_24_to_29.csv');
-      str += '\n' + await rootBundle.loadString('assets/nov_chats_30.csv');
+      str += '\n' +
+          await rootBundle.loadString('assets/nov_dec_chats_30_to_3.csv');
 
+      // parse raw data into a map of header:value pairs
       List<String> lines = const LineSplitter().convert(str);
       String rawHeaders = lines[0];
 
@@ -184,7 +193,9 @@ class AppController extends GetxController {
       }
       debugPrint('total lines imported: $importCount');
       needImport.value = false;
+      //assess minmax handle times
       filterController.setInitialHandleTimeParameters();
+      //build dynamic filter options
       filterController.assembleOptions();
       return true;
     }
@@ -229,6 +240,7 @@ class AppController extends GetxController {
       }
     }
     try {
+      // pass data to be exported
       await exportController.exportSearch(l);
     } catch (e) {
       debugPrint('$e');
